@@ -31,3 +31,7 @@ npm install
 ```bash
 npm run dev
 ```
+
+# Checkout the build
+
+https://afternoon-garden-53253.herokuapp.com/
