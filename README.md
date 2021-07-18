@@ -1,5 +1,9 @@
 This is a MERN Stack App .
-It is a Social Network for developers.
+It is a [Social Network](https://devconnect2105.herokuapp.com) for developers.
+
+# Checkout the build
+
+[here](https://devconnect2105.herokuapp.com/)
 
 # Quick Start
 
@@ -32,6 +36,4 @@ npm install
 npm run dev
 ```
 
-# Checkout the build
 
-https://afternoon-garden-53253.herokuapp.com/
