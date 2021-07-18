@@ -1,5 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://bhavesh12:bhavesh12@cluster0.bbyv2.mongodb.net/Devconnect?retryWrites=true&w=majority",
-  "jwtSecret": "Abc@123#",
-  "githubToken": "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"
-}
