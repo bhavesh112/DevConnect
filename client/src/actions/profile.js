@@ -13,7 +13,7 @@ import {
 } from './types';
 
 // Get current users profile
-export const getCurrentProfile = () => async dispatch => {
+export const getCurrentProfile = () => async (dispatch) => {
   try {
     const res = await api.get('/profile/me');
 
@@ -30,7 +30,7 @@ export const getCurrentProfile = () => async dispatch => {
 };
 
 // Get all profiles
-export const getProfiles = () => async dispatch => {
+export const getProfiles = () => async (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
 
   try {
@@ -49,7 +49,7 @@ export const getProfiles = () => async dispatch => {
 };
 
 // Get profile by ID
-export const getProfileById = userId => async dispatch => {
+export const getProfileById = (userId) => async (dispatch) => {
   try {
     const res = await api.get(`/profile/user/${userId}`);
 
@@ -66,14 +66,15 @@ export const getProfileById = userId => async dispatch => {
 };
 
 // Get Github repos
-export const getGithubRepos = username => async dispatch => {
+export const getGithubRepos = (username) => async (dispatch) => {
   try {
     const res = await api.get(`/profile/github/${username}`);
-
-    dispatch({
-      type: GET_REPOS,
-      payload: res.data
-    });
+    if (res.data instanceof Array)
+      dispatch({
+        type: GET_REPOS,
+        payload: res.data
+      });
+    else throw new Error('No Repos');
   } catch (err) {
     dispatch({
       type: NO_REPOS
@@ -82,40 +83,40 @@ export const getGithubRepos = username => async dispatch => {
 };
 
 // Create or update profile
-export const createProfile = (
-  formData,
-  history,
-  edit = false
-) => async dispatch => {
-  try {
-    const res = await api.post('/profile', formData);
+export const createProfile =
+  (formData, history, edit = false) =>
+  async (dispatch) => {
+    try {
+      const res = await api.post('/profile', formData);
 
-    dispatch({
-      type: GET_PROFILE,
-      payload: res.data
-    });
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      });
 
-    dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
+      dispatch(
+        setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success')
+      );
 
-    if (!edit) {
-      history.push('/dashboard');
+      if (!edit) {
+        history.push('/dashboard');
+      }
+    } catch (err) {
+      const errors = err.response.data.errors;
+
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      }
+
+      dispatch({
+        type: PROFILE_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status }
+      });
     }
-  } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-    }
-
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-};
+  };
 
 // Add Experience
-export const addExperience = (formData, history) => async dispatch => {
+export const addExperience = (formData, history) => async (dispatch) => {
   try {
     const res = await api.put('/profile/experience', formData);
 
@@ -131,7 +132,7 @@ export const addExperience = (formData, history) => async dispatch => {
     const errors = err.response.data.errors;
 
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
     }
 
     dispatch({
@@ -142,7 +143,7 @@ export const addExperience = (formData, history) => async dispatch => {
 };
 
 // Add Education
-export const addEducation = (formData, history) => async dispatch => {
+export const addEducation = (formData, history) => async (dispatch) => {
   try {
     const res = await api.put('/profile/education', formData);
 
@@ -158,7 +159,7 @@ export const addEducation = (formData, history) => async dispatch => {
     const errors = err.response.data.errors;
 
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
     }
 
     dispatch({
@@ -169,7 +170,7 @@ export const addEducation = (formData, history) => async dispatch => {
 };
 
 // Delete experience
-export const deleteExperience = id => async dispatch => {
+export const deleteExperience = (id) => async (dispatch) => {
   try {
     const res = await api.delete(`/profile/experience/${id}`);
 
@@ -188,7 +189,7 @@ export const deleteExperience = id => async dispatch => {
 };
 
 // Delete education
-export const deleteEducation = id => async dispatch => {
+export const deleteEducation = (id) => async (dispatch) => {
   try {
     const res = await api.delete(`/profile/education/${id}`);
 
@@ -207,7 +208,7 @@ export const deleteEducation = id => async dispatch => {
 };
 
 // Delete account & profile
-export const deleteAccount = () => async dispatch => {
+export const deleteAccount = () => async (dispatch) => {
   if (window.confirm('Are you sure? This can NOT be undone!')) {
     try {
       await api.delete('/profile');
