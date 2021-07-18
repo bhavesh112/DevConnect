@@ -352,12 +352,16 @@ button {
 /* Profiles Page */
 .profile {
   display: grid;
-  grid-template-columns: 2fr 4fr 2fr;
+  grid-template-columns: 1fr 4fr 2fr;
   align-items: center;
   grid-gap: 2rem;
   padding: 1rem;
   line-height: 1.8;
   margin-bottom: 1rem;
+}
+.profile-img {
+  width: 120px !important;
+  height: 120px;
 }
 
 /* Profile Page */
